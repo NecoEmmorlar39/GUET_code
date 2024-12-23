@@ -36,7 +36,7 @@ int main()
         }
         scanf("%d",&num);
     }
-    for(p=head;p->next!=NULL;p=p->next)
+    for(p=head;p!=NULL;p=p->next)
     {
         printf("%d %s %d\n",p->num,p->name,p->score);
     }
