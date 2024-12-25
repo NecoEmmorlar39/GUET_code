@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+
 typedef struct Student
 {
 	char stu_number[20];
@@ -10,14 +11,11 @@ typedef struct Student
 	float overall_mark;
 } Student;
 
-Student stus[100];
-int N;
-
 void inputInformation(Student *stus, int N)
 {
 	for (int i = 0; i < N; i++)
 	{
-		printf("学生%d的学号，姓名，平时成绩，考试成绩(空格分隔)：\n", i);
+		printf("学生%d的学号，姓名，平时成绩，考试成绩(空格分隔)：\n", i + 1);
 		scanf("%s %s %f %f",
 			  stus[i].stu_number,
 			  stus[i].stu_name,
@@ -27,6 +25,7 @@ void inputInformation(Student *stus, int N)
 		stus[i].overall_mark = (stus[i].usual_mark * 0.2) + (stus[i].exam_mark * 0.8);
 	}
 }
+
 void saveInformation(Student *stus, int N, char *path)
 {
 	FILE *file = fopen(path, "w");
@@ -37,7 +36,7 @@ void saveInformation(Student *stus, int N, char *path)
 	}
 	for (int i = 0; i < N; i++)
 	{
-		fprintf(file, "%s,%s,%f,%f,%f\n",
+		fprintf(file, "%s %s %f %f %f\n",
 				stus[i].stu_number,
 				stus[i].stu_name,
 				stus[i].usual_mark,
@@ -46,6 +45,7 @@ void saveInformation(Student *stus, int N, char *path)
 	}
 	fclose(file);
 }
+
 void outputInformation(char *path)
 {
 	FILE *file = fopen(path, "r");
@@ -54,14 +54,14 @@ void outputInformation(char *path)
 		printf("fail to open file");
 		return;
 	}
-	Student students[100];
+	Student students[1024];
 	int num = 0, max = 0, min = 0;
-	while (fscanf(file, "%s,%s,%f,%f,%f",
+	while (fscanf(file, "%s %s %f %f %f",
 				  students[num].stu_number,
 				  students[num].stu_name,
-				  students[num].usual_mark,
-				  students[num].exam_mark,
-				  students[num].overall_mark) != EOF)
+				  &students[num].usual_mark, // fscanf如果读取的是数字也要加上&取地址符，否则无法正常读取
+				  &students[num].exam_mark,
+				  &students[num].overall_mark) == 5)
 	{
 		num++;
 	}
@@ -100,4 +100,23 @@ void outputInformation(char *path)
 		   students[max].exam_mark,
 		   students[max].overall_mark);
 	fclose(file);
+}
+int main()
+{
+	Student *stus;
+	int N;
+	char path[1024];
+	strcpy(path, "C:\\code\\c\\程序设计与问题求解实验课代码\\实验七 文件\\test.txt");
+	printf("学生人数N=\n");
+	scanf("%d", &N);
+
+	stus = (Student *)malloc(sizeof(Student) * N);
+
+	inputInformation(stus, N);
+
+	saveInformation(stus, N, path);
+
+	outputInformation(path);
+
+	free(stus);
 }
