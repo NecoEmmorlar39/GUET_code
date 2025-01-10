@@ -10,6 +10,7 @@ typedef struct nmb
 void print_list(nmb *head)
 {
     nmb *p;
+    printf("Number List\n");
     for (p = head; p != NULL; p = p->next)
     {
         printf("%d ", p->xuehao);
@@ -79,6 +80,7 @@ int main()
 {
     int num = 1, xuehao, index, number, in, in_ele, delete;
     nmb *head = NULL, *tail = NULL, *p;
+    printf("Please input the number(Use spaces to separate numbers)\n");
     scanf("%d", &xuehao);
     while (xuehao != 0)
     {
@@ -101,19 +103,23 @@ int main()
     print_list(head);
 
     // 寻找序号对应的学号
+    printf("Please input the index you want to search");
     scanf("%d", &index);
     search_index(index, head);
 
     // 寻找学号对应的序号
+    printf("Please input the number you want to search");
     scanf("%d", &number);
     search_number(number, head);
 
     // 插入节点
+    printf("Please input the index and number you want to insert to the table,the number will be insert in the next position of the index you input(format: index number)");
     scanf("%d %d", &in, &in_ele);
     insert_node(in, in_ele, &head);
     print_list(head);
 
     // 删除节点
+    printf("Please input the index you want to delete");
     scanf("%d", &delete);
     delete_node(delete, &head);
     print_list(head);
